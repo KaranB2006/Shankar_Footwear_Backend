@@ -10,25 +10,23 @@ public class DBConnection {
         Connection con = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.postgresql.Driver");
 
-            // ✅ Railway DB credentials
-            String host = "yamanote.proxy.rlwy.net";
-            String port = "40331";
-            String dbName = "railway";
-            String user = "root";
-            String password = "zkRbxMieyKBxEGfREDhThzUnTrSqmxv";
+            String host = "dpg-d26vo8m3jp1c73dnqjvg-a.oregon-postgres.render.com";
+            String port = "5432";
+            String dbName = "footwear_db_n4us";
+            String user = "footwear_db_n4us_user";
+            String password = "YXiPcjvJ6P4F8uE9V78eMufpWRXreZ7S";
 
-            String jdbcUrl = "jdbc:mysql://" + host + ":" + port + "/" + dbName
-                    + "?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true";
+            String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName;
 
             con = DriverManager.getConnection(jdbcUrl, user, password);
-            System.out.println("✅ Connected to MySQL");
+            System.out.println("✅ Connected to PostgreSQL database");
         } catch (ClassNotFoundException e) {
-            System.out.println("❌ MySQL JDBC Driver not found");
+            System.out.println("❌ PostgreSQL JDBC Driver not found");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("❌ Failed to connect to MySQL");
+            System.out.println("❌ Failed to connect to PostgreSQL");
             System.out.println("Message: " + e.getMessage());
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("ErrorCode: " + e.getErrorCode());
