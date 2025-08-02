@@ -16,7 +16,7 @@ public class CartServlet extends HttpServlet {
             return;
         }
         // Enable CORS with credentials
-        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-frontend.onrender.com");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type");
         res.setHeader("Access-Control-Allow-Credentials", "true");
