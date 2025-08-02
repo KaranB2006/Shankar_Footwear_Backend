@@ -18,7 +18,7 @@ public class DBConnection {
             String user = "footwear_db_n4us_user";
             String password = "YXiPcjvJ6P4F8uE9V78eMufpWRXreZ7S";
 
-            String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName;
+            String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName + "?sslmode=require";
 
             con = DriverManager.getConnection(jdbcUrl, user, password);
             System.out.println("✅ Connected to PostgreSQL database");
