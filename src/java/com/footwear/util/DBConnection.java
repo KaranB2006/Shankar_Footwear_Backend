@@ -12,12 +12,13 @@ public class DBConnection {
         try {
             Class.forName("org.postgresql.Driver");
 
-            String host = "dpg-d26vo8m3jp1c73dnqjvg-a.oregon-postgres.render.com";
+            String host = "dpg-d2dhncndiees73d0de8g-a.oregon-postgres.render.com"; // External Hostname
             String port = "5432";
-            String dbName = "footwear_db_n4us";
-            String user = "footwear_db_n4us_user";
-            String password = "YXiPcjvJ6P4F8uE9V78eMufpWRXreZ7S";
+            String dbName = "footwear_db_5e30";
+            String user = "footwear_db_5e30_user";
+            String password = "0tD7xXzHVYMvJRBwS1Jjuz1s9K0br6FC";
 
+            // Use SSL for Render external connection
             String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName + "?sslmode=require";
 
             con = DriverManager.getConnection(jdbcUrl, user, password);
