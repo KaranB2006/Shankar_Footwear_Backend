@@ -11,28 +11,34 @@ public class CreateOrderServlet extends HttpServlet {
 
     private static final String APP_ID = "YOUR_CASHFREE_APP_ID";
     private static final String SECRET_KEY = "YOUR_CASHFREE_SECRET_KEY";
-    private static final String CASHFREE_ORDER_URL = "https://sandbox.cashfree.com/pg/orders"; // use live URL in prod
+    private static final String CASHFREE_ORDER_URL = "https://sandbox.cashfree.com/pg/orders"; // live URL in production
+
+    // ✅ Railway frontend URL
+    private static final String FRONTEND_URL = "https://shankar_footwear_frontend.up.railway.app";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-frontend.onrender.com");
+        // CORS headers for Railway frontend
+        response.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-
         response.setContentType("application/json");
+
         PrintWriter out = response.getWriter();
 
+        // Check session
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.print("{\"status\":\"unauthorized\", \"message\":\"User not logged in\"}");
+            out.print("{\"status\":\"error\",\"message\":\"User not logged in\"}");
             return;
         }
 
         try {
+            // Read request body
             BufferedReader reader = request.getReader();
             StringBuilder sb = new StringBuilder();
             String line;
@@ -40,18 +46,18 @@ public class CreateOrderServlet extends HttpServlet {
 
             if (sb.length() == 0) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"status\":\"error\", \"message\":\"Empty request body\"}");
+                out.print("{\"status\":\"error\",\"message\":\"Empty request body\"}");
                 return;
             }
 
-            // Dummy user email for now (use from session if available)
+            // Dummy email for now; can use session if available
             String customerEmail = "testuser@example.com";
 
             // Random order ID and amount
             String orderId = "order_" + System.currentTimeMillis();
             int amount = 500; // ₹500
 
-            // Create JSON payload
+            // JSON payload for Cashfree
             String payload = "{"
                     + "\"order_id\":\"" + orderId + "\","
                     + "\"order_amount\":" + amount + ","
@@ -62,7 +68,7 @@ public class CreateOrderServlet extends HttpServlet {
                     + "}"
                     + "}";
 
-            // Open connection
+            // Connect to Cashfree
             URL url = new URL(CASHFREE_ORDER_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -71,7 +77,7 @@ public class CreateOrderServlet extends HttpServlet {
             conn.setRequestProperty("x-client-id", APP_ID);
             conn.setRequestProperty("x-client-secret", SECRET_KEY);
 
-            // Send data
+            // Send payload
             OutputStream os = conn.getOutputStream();
             os.write(payload.getBytes(StandardCharsets.UTF_8));
             os.flush();
@@ -89,13 +95,14 @@ public class CreateOrderServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print("{\"status\":\"error\", \"message\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            out.print("{\"status\":\"error\",\"message\":\"" + e.getMessage().replace("\"", "'") + "\"}");
         }
     }
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-backend.onrender.com");
+        // Preflight CORS for Railway frontend
+        response.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");

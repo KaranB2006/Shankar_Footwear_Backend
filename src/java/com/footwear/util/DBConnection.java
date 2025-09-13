@@ -10,24 +10,28 @@ public class DBConnection {
         Connection con = null;
 
         try {
-            Class.forName("org.postgresql.Driver");
+            // ✅ Load MySQL driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            String host = "dpg-d2dhncndiees73d0de8g-a.oregon-postgres.render.com"; // External Hostname
-            String port = "5432";
-            String dbName = "footwear_db_5e30";
-            String user = "footwear_db_5e30_user";
-            String password = "0tD7xXzHVYMvJRBwS1Jjuz1s9K0br6FC";
+            // Railway MySQL connection details
+            String host = "shuttle.proxy.rlwy.net";
+            String port = "30349";
+            String dbName = "railway";
+            String user = "root";
+            String password = "uMiSkSRuiPnDQYJvATLrRmJHNYNuzLcq"; // replace with actual Railway password
 
-            // Use SSL for Render external connection
-            String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName + "?sslmode=require";
+            // JDBC URL (with SSL & public key retrieval for Railway)
+            String jdbcUrl = "jdbc:mysql://" + host + ":" + port + "/" + dbName
+                    + "?useSSL=true&requireSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
+            // Connect
             con = DriverManager.getConnection(jdbcUrl, user, password);
-            System.out.println("✅ Connected to PostgreSQL database");
+            System.out.println("✅ Connected to MySQL database");
         } catch (ClassNotFoundException e) {
-            System.out.println("❌ PostgreSQL JDBC Driver not found");
+            System.out.println("❌ MySQL JDBC Driver not found");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("❌ Failed to connect to PostgreSQL");
+            System.out.println("❌ Failed to connect to MySQL");
             System.out.println("Message: " + e.getMessage());
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("ErrorCode: " + e.getErrorCode());

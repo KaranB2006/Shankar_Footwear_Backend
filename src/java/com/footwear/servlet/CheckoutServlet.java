@@ -3,29 +3,33 @@ package com.footwear.servlet;
 import com.footwear.util.DBConnection;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
 public class CheckoutServlet extends HttpServlet {
+
+    // ✅ Railway frontend URL
+    private static final String FRONTEND_URL = "https://shankar_footwear_frontend.up.railway.app";
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // CORS settings for session support
-        response.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-frontend.onrender.com");
+        // CORS settings for Railway frontend
+        response.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-
         response.setContentType("application/json");
+
         PrintWriter out = response.getWriter();
 
         // Get session
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.write("{\"status\":\"unauthorized\", \"message\":\"User not logged in\"}");
+            out.write("{\"status\":\"error\", \"message\":\"User not logged in\"}");
             return;
         }
 
@@ -87,17 +91,17 @@ public class CheckoutServlet extends HttpServlet {
 
             out.write("{\"status\":\"success\"}");
 
-        }  catch (Exception e) {
-    e.printStackTrace(); // ✅ Logs to server logs
-    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    out.print("{\"status\":\"error\", \"message\":\"" + e.getMessage().replace("\"", "'") + "\"}");
-}
-
+        } catch (Exception e) {
+            e.printStackTrace(); // Logs to server
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"status\":\"error\",\"message\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+        }
     }
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-backend.onrender.com");
+        // CORS for preflight requests
+        response.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");

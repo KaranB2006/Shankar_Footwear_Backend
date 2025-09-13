@@ -7,15 +7,18 @@ import javax.servlet.http.*;
 import java.sql.*;
 
 public class SignupServlet extends HttpServlet {
+
+    // ✅ Railway frontend URL
+    private static final String FRONTEND_URL = "https://shankar_footwear_frontend.up.railway.app";
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        // CORS headers
-        res.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-frontend.onrender.com");
+        // CORS headers for Railway frontend
+        res.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         res.setHeader("Access-Control-Allow-Credentials", "true");
 
-        // Set response type
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
         PrintWriter out = res.getWriter();
@@ -61,18 +64,20 @@ public class SignupServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print("{\"status\":\"error\", \"message\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+            out.print("{\"status\":\"error\",\"message\":\"" + e.getMessage().replace("\"", "'") + "\"}");
+        } finally {
+            out.flush();
+            out.close();
         }
     }
 
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        // Handle preflight request
-        res.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-frontend.onrender.com");
+        // Preflight CORS for Railway frontend
+        res.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setStatus(HttpServletResponse.SC_OK);
     }
 }
-

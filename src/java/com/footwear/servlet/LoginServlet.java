@@ -7,9 +7,14 @@ import javax.servlet.http.*;
 import java.sql.*;
 
 public class LoginServlet extends HttpServlet {
+
+    // ✅ Railway frontend URL
+    private static final String FRONTEND_URL = "https://shankar_footwear_frontend.up.railway.app";
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        // Allow CORS
-        res.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-frontend.onrender.com");
+        // CORS headers for Railway frontend
+        res.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type");
         res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -24,8 +29,6 @@ public class LoginServlet extends HttpServlet {
         try (Connection con = DBConnection.getConnection()) {
             if (con == null) {
                 out.print("{\"status\":\"error\", \"message\":\"Database connection failed\"}");
-                out.flush();
-                out.close();
                 return;
             }
 
@@ -50,7 +53,7 @@ public class LoginServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // logs in server log
+            e.printStackTrace(); // logs to server log
             res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"status\":\"error\", \"message\":\"Internal server error\"}");
         } finally {
@@ -62,8 +65,9 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setHeader("Access-Control-Allow-Origin", "https://shankar-footwear-frontend.onrender.com");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        // Preflight CORS for Railway frontend
+        response.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setStatus(HttpServletResponse.SC_OK);
