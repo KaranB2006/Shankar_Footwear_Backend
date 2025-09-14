@@ -11,7 +11,7 @@ import java.sql.*;
 public class CheckoutServlet extends HttpServlet {
 
     // ✅ Railway frontend URL
-    private static final String FRONTEND_URL = "https://shankar_footwear_frontend.up.railway.app";
+    private static final String FRONTEND_URL = "https://your-netlify-site.netlify.app";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

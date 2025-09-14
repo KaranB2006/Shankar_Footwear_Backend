@@ -14,7 +14,7 @@ public class CreateOrderServlet extends HttpServlet {
     private static final String CASHFREE_ORDER_URL = "https://sandbox.cashfree.com/pg/orders"; // live URL in production
 
     // ✅ Railway frontend URL
-    private static final String FRONTEND_URL = "https://shankar_footwear_frontend.up.railway.app";
+    private static final String FRONTEND_URL = "https://your-netlify-site.netlify.app";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
