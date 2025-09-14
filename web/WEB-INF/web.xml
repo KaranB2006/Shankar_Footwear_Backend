@@ -40,7 +40,7 @@
 
 <servlet-mapping>
     <servlet-name>CreateOrderServlet</servlet-name>
-    <url-pattern>/CreateOrderServlet</url-pattern>
+    <url-pattern>/CheckoutServlet</url-pattern>
 </servlet-mapping>
 
 <session-config>
